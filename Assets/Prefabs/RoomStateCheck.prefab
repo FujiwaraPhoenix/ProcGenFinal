@@ -51,8 +51,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb53760417e8acb4d88d91762d85db8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomType: 0
+  roomType: -1
   upExit: 0
   downExit: 0
   leftExit: 0
   rightExit: 0
+  playerSpawn: 0
+  active: 0
