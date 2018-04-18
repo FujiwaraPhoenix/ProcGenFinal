@@ -17,7 +17,9 @@ public class MapGen : MonoBehaviour {
             for (int j = 0; j < mapSize; j++)
             {
                 mapLocs[i,j] = Instantiate(spawner, new Vector3((i * 5.9226f), (j * 5.9226f), 0f), Quaternion.identity);
-            }
+				mapLocs[i,j].gridX = i;
+				mapLocs[i,j].gridY = j;
+			}
         }
         //initializeMap();
         altInitMap();
@@ -257,30 +259,36 @@ public class MapGen : MonoBehaviour {
         }
         if (r.leftExit)
         {
-            branchOffshoot(mapLocs[currX - 1, currY], .95f, currX-1, currY, 3);
+            branchOffshoot(1f, currX-1, currY, 3);
         }
         if (r.rightExit)
         {
-            branchOffshoot(mapLocs[currX + 1, currY], .95f, currX + 1, currY, 2);
+            branchOffshoot(1f, currX + 1, currY, 2);
         }
         if (r.upExit)
         {
-            branchOffshoot(mapLocs[currX, currY + 1], .95f, currX, currY + 1, 1);
+            branchOffshoot(1f, currX, currY + 1, 1);
         }
         if (r.downExit)
         {
-            branchOffshoot(mapLocs[currX, currY - 1], .95f, currX, currY - 1, 0);
+            branchOffshoot(1f, currX, currY - 1, 0);
         }
     }
 
-    void branchOffshoot(RoomState r, float branchRate, int currX, int currY, int lastVisited)
+    void branchOffshoot(float branchRate, int currX, int currY, int lastVisited)
     {
+		if (currX < 0 || currX >= mapSize || currY < 0 || currY >= mapSize) {
+			return;
+		}
+
+		RoomState r = mapLocs[currX, currY];
         try
         {
             if (!(r.active))
             {
                 r.active = true;
                 //Roomtype
+                float branchChk = Random.Range(0, 1f);
                 float determineType = Random.Range(0, 1f);
                 if (determineType < .5f)
                 {
@@ -290,7 +298,24 @@ public class MapGen : MonoBehaviour {
                 {
                     r.roomType = 1;
                 }
-                int openChk = Random.Range(0, 4);
+                int openChk = 0;
+                float tempChk = branchRate * branchChk;
+                if (tempChk >= .75f)
+                {
+                    openChk = 0;
+                }
+                else if (tempChk >= .5f)
+                {
+                    openChk = 1;
+                }
+                else if (tempChk >= .25f)
+                {
+                    openChk = 2;
+                }
+                else
+                {
+                    openChk = 3;
+                }
                 //lastVisited is, obv, the last room visited. 0 is above, 1 is below, 2 is left, 3 right.
                 switch (lastVisited)
                 {
@@ -301,12 +326,12 @@ public class MapGen : MonoBehaviour {
                         {
                             //3 rooms open
                             case 0:
-                                branchOffshoot(mapLocs[currX - 1, currY], branchRate - .05f, currX - 1, currY, 3);
-                                r.leftExit = true;
-                                branchOffshoot(mapLocs[currX + 1, currY], branchRate - .05f, currX + 1, currY, 2);
-                                r.rightExit = true;
+								r.leftExit = true;
+                                branchOffshoot(branchRate - .05f, currX - 1, currY, 3);
+								r.rightExit = true;
+                                branchOffshoot(branchRate - .05f, currX + 1, currY, 2);
                                 r.downExit = true;
-                                branchOffshoot(mapLocs[currX, currY - 1], branchRate - .05f, currX, currY - 1, 0);
+                                branchOffshoot(branchRate - .05f, currX, currY - 1, 0);
                                 break;
                             //2 rooms open
                             case 1:
@@ -314,22 +339,25 @@ public class MapGen : MonoBehaviour {
                                 switch (roomSet)
                                 {
                                     case 0:
-                                        branchOffshoot(mapLocs[currX - 1, currY], branchRate - .05f, currX - 1, currY, 3);
-                                        r.leftExit = true;
-                                        branchOffshoot(mapLocs[currX + 1, currY], branchRate - .05f, currX + 1, currY, 2);
-                                        r.rightExit = true;
+										r.leftExit = true;
+                                        branchOffshoot(branchRate - .05f, currX - 1, currY, 3);
+
+										r.rightExit = true;
+                                        branchOffshoot(branchRate - .05f, currX + 1, currY, 2);
                                         break;
                                     case 1:
-                                        branchOffshoot(mapLocs[currX - 1, currY], branchRate - .05f, currX - 1, currY, 3);
-                                        r.leftExit = true;
-                                        branchOffshoot(mapLocs[currX, currY - 1], branchRate - .05f, currX, currY - 1, 0);
-                                        r.downExit = true;
+										r.leftExit = true;
+                                        branchOffshoot(branchRate - .05f, currX - 1, currY, 3);
+
+										r.downExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY - 1, 0);
                                         break;
                                     case 2:
-                                        branchOffshoot(mapLocs[currX + 1, currY], branchRate - .05f, currX + 1, currY, 2);
-                                        r.rightExit = true;
-                                        branchOffshoot(mapLocs[currX, currY - 1], branchRate - .05f, currX, currY - 1, 0);
-                                        r.downExit = true;
+										r.rightExit = true;
+                                        branchOffshoot(branchRate - .05f, currX + 1, currY, 2);
+
+										r.downExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY - 1, 0);
                                         break;
                                 }
                                 break;
@@ -340,15 +368,15 @@ public class MapGen : MonoBehaviour {
                                 {
                                     case 0:
                                         r.leftExit = true;
-                                        branchOffshoot(mapLocs[currX - 1, currY], branchRate - .05f, currX - 1, currY, 3);
+                                        branchOffshoot(branchRate - .05f, currX - 1, currY, 3);
                                         break;
                                     case 1:
-                                        branchOffshoot(mapLocs[currX, currY - 1], branchRate - .05f, currX, currY - 1, 0);
-                                        r.downExit = true;
+										r.downExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY - 1, 0);
                                         break;
                                     case 2:
-                                        branchOffshoot(mapLocs[currX + 1, currY], branchRate - .05f, currX + 1, currY, 2);
-                                        r.rightExit = true;
+										r.rightExit = true;
+                                        branchOffshoot(branchRate - .05f, currX + 1, currY, 2);
                                         break;
                                 }
                                 break;
@@ -364,12 +392,12 @@ public class MapGen : MonoBehaviour {
                         {
                             //3 rooms open
                             case 0:
-                                branchOffshoot(mapLocs[currX - 1, currY], branchRate - .05f, currX - 1, currY, 3);
-                                r.leftExit = true;
-                                branchOffshoot(mapLocs[currX + 1, currY], branchRate - .05f, currX + 1, currY, 2);
-                                r.rightExit = true;
-                                branchOffshoot(mapLocs[currX, currY + 1], branchRate - .05f, currX, currY + 1, 1);
-                                r.upExit = true;
+								r.leftExit = true;
+                                branchOffshoot(branchRate - .05f, currX - 1, currY, 3);
+								r.rightExit = true;
+                                branchOffshoot(branchRate - .05f, currX + 1, currY, 2);
+								r.upExit = true;
+                                branchOffshoot(branchRate - .05f, currX, currY + 1, 1);
                                 break;
                             //2 rooms open
                             case 1:
@@ -377,22 +405,22 @@ public class MapGen : MonoBehaviour {
                                 switch (roomSet)
                                 {
                                     case 0:
-                                        branchOffshoot(mapLocs[currX - 1, currY], branchRate - .05f, currX - 1, currY, 3);
-                                        r.leftExit = true;
-                                        branchOffshoot(mapLocs[currX + 1, currY], branchRate - .05f, currX + 1, currY, 2);
-                                        r.rightExit = true;
+										r.leftExit = true;
+                                        branchOffshoot(branchRate - .05f, currX - 1, currY, 3);
+										r.rightExit = true;
+                                        branchOffshoot(branchRate - .05f, currX + 1, currY, 2);
                                         break;
                                     case 1:
-                                        branchOffshoot(mapLocs[currX - 1, currY], branchRate - .05f, currX - 1, currY, 3);
-                                        r.leftExit = true;
-                                        branchOffshoot(mapLocs[currX, currY + 1], branchRate - .05f, currX, currY + 1, 1);
-                                        r.upExit = true;
+										r.leftExit = true;
+                                        branchOffshoot(branchRate - .05f, currX - 1, currY, 3);
+										r.upExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY + 1, 1);
                                         break;
                                     case 2:
-                                        branchOffshoot(mapLocs[currX + 1, currY], branchRate - .05f, currX + 1, currY, 2);
-                                        r.rightExit = true;
-                                        branchOffshoot(mapLocs[currX, currY + 1], branchRate - .05f, currX, currY + 1, 1);
-                                        r.upExit = true;
+										r.rightExit = true;
+                                        branchOffshoot(branchRate - .05f, currX + 1, currY, 2);
+										r.upExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY + 1, 1);
                                         break;
                                 }
                                 break;
@@ -402,16 +430,16 @@ public class MapGen : MonoBehaviour {
                                 switch (roomChoice)
                                 {
                                     case 0:
-                                        branchOffshoot(mapLocs[currX - 1, currY], branchRate - .05f, currX - 1, currY, 3);
-                                        r.leftExit = true;
+										r.leftExit = true;
+                                        branchOffshoot(branchRate - .05f, currX - 1, currY, 3);
                                         break;
                                     case 1:
-                                        branchOffshoot(mapLocs[currX, currY + 1], branchRate - .05f, currX, currY + 1, 1);
-                                        r.upExit = true;
+										r.upExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY + 1, 1);
                                         break;
                                     case 2:
-                                        branchOffshoot(mapLocs[currX + 1, currY], branchRate - .05f, currX + 1, currY, 2);
-                                        r.rightExit = true;
+										r.rightExit = true;
+                                        branchOffshoot(branchRate - .05f, currX + 1, currY, 2);
                                         break;
                                 }
                                 break;
@@ -426,12 +454,12 @@ public class MapGen : MonoBehaviour {
                         {
                             //3 rooms open
                             case 0:
-                                branchOffshoot(mapLocs[currX + 1, currY], branchRate - .05f, currX + 1, currY, 2);
-                                r.rightExit = true;
-                                branchOffshoot(mapLocs[currX, currY + 1], branchRate - .05f, currX, currY + 1, 1);
-                                r.upExit = true;
-                                branchOffshoot(mapLocs[currX, currY - 1], branchRate - .05f, currX, currY - 1, 0);
-                                r.downExit = true;
+								r.rightExit = true;
+                                branchOffshoot(branchRate - .05f, currX + 1, currY, 2);
+								r.upExit = true;
+                                branchOffshoot(branchRate - .05f, currX, currY + 1, 1);
+								r.downExit = true;
+                                branchOffshoot(branchRate - .05f, currX, currY - 1, 0);
                                 break;
                             //2 rooms open
                             case 1:
@@ -439,22 +467,25 @@ public class MapGen : MonoBehaviour {
                                 switch (roomSet)
                                 {
                                     case 0:
-                                        branchOffshoot(mapLocs[currX, currY + 1], branchRate - .05f, currX, currY + 1, 1);
-                                        r.upExit = true;
-                                        branchOffshoot(mapLocs[currX + 1, currY], branchRate - .05f, currX + 1, currY, 2);
-                                        r.rightExit = true;
+										r.upExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY + 1, 1);
+
+										r.rightExit = true;
+                                        branchOffshoot(branchRate - .05f, currX + 1, currY, 2);
                                         break;
                                     case 1:
-                                        branchOffshoot(mapLocs[currX, currY - 1], branchRate - .05f, currX, currY - 1, 0);
-                                        r.downExit = true;
-                                        branchOffshoot(mapLocs[currX, currY + 1], branchRate - .05f, currX, currY + 1, 1);
-                                        r.upExit = true;
+										r.downExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY - 1, 0);
+
+										r.upExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY + 1, 1);
                                         break;
                                     case 2:
-                                        branchOffshoot(mapLocs[currX + 1, currY], branchRate - .05f, currX + 1, currY, 2);
-                                        r.rightExit = true;
-                                        branchOffshoot(mapLocs[currX, currY - 1], branchRate - .05f, currX, currY - 1, 0);
-                                        r.downExit = true;
+										r.rightExit = true;
+                                        branchOffshoot(branchRate - .05f, currX + 1, currY, 2);
+
+										r.downExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY - 1, 0);
                                         break;
                                 }
                                 break;
@@ -465,15 +496,15 @@ public class MapGen : MonoBehaviour {
                                 {
                                     case 0:
                                         r.downExit = true;
-                                        branchOffshoot(mapLocs[currX, currY - 1], branchRate - .05f, currX, currY - 1, 0);
+                                        branchOffshoot(branchRate - .05f, currX, currY - 1, 0);
                                         break;
                                     case 1:
                                         r.upExit = true;
-                                        branchOffshoot(mapLocs[currX, currY + 1], branchRate - .05f, currX, currY + 1, 1);
+                                        branchOffshoot(branchRate - .05f, currX, currY + 1, 1);
                                         break;
                                     case 2:
-                                        branchOffshoot(mapLocs[currX + 1, currY], branchRate - .05f, currX + 1, currY, 2);
-                                        r.rightExit = true;
+										r.rightExit = true;
+                                        branchOffshoot(branchRate - .05f, currX + 1, currY, 2);
                                         break;
                                 }
                                 break;
@@ -488,12 +519,14 @@ public class MapGen : MonoBehaviour {
                         {
                             //3 rooms open
                             case 0:
-                                branchOffshoot(mapLocs[currX - 1, currY], branchRate - .05f, currX - 1, currY, 3);
-                                r.leftExit = true;
-                                branchOffshoot(mapLocs[currX, currY + 1], branchRate - .05f, currX, currY + 1, 1);
-                                r.upExit = true;
-                                branchOffshoot(mapLocs[currX, currY - 1], branchRate - .05f, currX, currY - 1, 0);
-                                r.downExit = true;
+								r.leftExit = true;
+                                branchOffshoot(branchRate - .05f, currX - 1, currY, 3);
+					
+								r.upExit = true;
+                                branchOffshoot(branchRate - .05f, currX, currY + 1, 1);
+
+								r.downExit = true;
+                                branchOffshoot(branchRate - .05f, currX, currY - 1, 0);
                                 break;
                             //2 rooms open
                             case 1:
@@ -501,22 +534,22 @@ public class MapGen : MonoBehaviour {
                                 switch (roomSet)
                                 {
                                     case 0:
-                                        branchOffshoot(mapLocs[currX, currY + 1], branchRate - .05f, currX, currY + 1, 1);
-                                        r.upExit = true;
-                                        branchOffshoot(mapLocs[currX - 1, currY], branchRate - .05f, currX - 1, currY, 3);
-                                        r.leftExit = true;
+										r.upExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY + 1, 1);
+										r.leftExit = true;
+                                        branchOffshoot(branchRate - .05f, currX - 1, currY, 3);
                                         break;
                                     case 1:
-                                        branchOffshoot(mapLocs[currX, currY - 1], branchRate - .05f, currX, currY - 1, 0);
-                                        r.downExit = true;
-                                        branchOffshoot(mapLocs[currX, currY + 1], branchRate - .05f, currX, currY + 1, 1);
-                                        r.upExit = true;
+										r.downExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY - 1, 0);
+										r.upExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY + 1, 1);
                                         break;
                                     case 2:
-                                        branchOffshoot(mapLocs[currX - 1, currY], branchRate - .05f, currX - 1, currY, 3);
-                                        r.leftExit = true;
-                                        branchOffshoot(mapLocs[currX, currY - 1], branchRate - .05f, currX, currY - 1, 0);
-                                        r.downExit = true;
+										r.leftExit = true;
+                                        branchOffshoot(branchRate - .05f, currX - 1, currY, 3);
+										r.downExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY - 1, 0);
                                         break;
                                 }
                                 break;
@@ -526,16 +559,16 @@ public class MapGen : MonoBehaviour {
                                 switch (roomChoice)
                                 {
                                     case 0:
-                                        branchOffshoot(mapLocs[currX, currY - 1], branchRate - .05f, currX, currY - 1, 0);
-                                        r.downExit = true;
+										r.downExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY - 1, 0);
                                         break;
                                     case 1:
-                                        branchOffshoot(mapLocs[currX, currY + 1], branchRate - .05f, currX, currY + 1, 1);
-                                        r.upExit = true;
+										r.upExit = true;
+                                        branchOffshoot(branchRate - .05f, currX, currY + 1, 1);
                                         break;
                                     case 2:
-                                        branchOffshoot(mapLocs[currX - 1, currY], branchRate - .05f, currX - 1, currY, 3);
-                                        r.leftExit = true;
+										r.leftExit = true;
+                                        branchOffshoot(branchRate - .05f, currX - 1, currY, 3);
                                         break;
                                 }
                                 break;
@@ -549,35 +582,42 @@ public class MapGen : MonoBehaviour {
             {
                 //Decide whether or not to randomly open up the room. Or not.
                 float open = Random.Range(0, 1f);
+				//Debug.Log("Room at " + currX + "," + currY + " visited from " + lastVisited);
                 switch (lastVisited)
                 {
                     case 0:
                         if (open < .5f)
                         {
                             r.upExit = true;
+							mapLocs[currX, currY+1].downExit = true;
                         }
                         else
                         {
-                            mapLocs[currX, currY - 1].downExit = false;
+							r.upExit = false;
+                            mapLocs[currX, currY + 1].downExit = false;
                         }
                         break;
                     case 1:
                         if (open < .5f)
                         {
                             r.downExit = true;
+							mapLocs[currX, currY-1].upExit = true;
                         }
                         else
                         {
-                            mapLocs[currX, currY + 1].upExit = false;
+							r.downExit = false;
+                            mapLocs[currX, currY - 1].upExit = false;
                         }
                         break;
                     case 2:
                         if (open < .5f)
-                        {
+						{	
                             r.leftExit = true;
+							mapLocs[currX-1, currY].rightExit = true;
                         }
                         else
                         {
+							r.leftExit = false;
                             mapLocs[currX - 1, currY].rightExit = false;
                         }
                         break;
@@ -585,17 +625,22 @@ public class MapGen : MonoBehaviour {
                         if (open < .5f)
                         {
                             r.rightExit = true;
+							mapLocs[currX+1, currY].leftExit = true;
                         }
                         else
                         {
+							r.rightExit = false;
                             mapLocs[currX + 1, currY].leftExit = false;
                         }
                         break;
                 }
             }
         }
-        catch
+		catch (System.Exception e) 
         {
+			Debug.Log(e);
+			Debug.Log(currX + "," + currY);
+
             return;
         }
     }
@@ -603,6 +648,23 @@ public class MapGen : MonoBehaviour {
     //Drops a room down on a position
     void makeRoom(RoomState r)
     {
+        if (r.gridX == 0)
+        {
+            r.leftExit = false;
+        }
+        if (r.gridY == 0)
+        {
+            r.downExit = false;
+        }
+        if (r.gridX == mapSize-1)
+        {
+            r.rightExit = false;
+        }
+        if (r.gridY == mapSize-1)
+        {
+            r.upExit = false;
+        }
+        GameObject thisRoom = null;
         if (r.roomType == 0)
         {
             if (r.upExit)
@@ -613,20 +675,20 @@ public class MapGen : MonoBehaviour {
                     {
                         if (r.leftExit)
                         {
-                            GameObject thisRoom = Instantiate(rooms[0], r.transform.position, Quaternion.identity);
+                            thisRoom = Instantiate(rooms[0], r.transform.position, Quaternion.identity);
                         }
                         else
                         {
-                            GameObject thisRoom = Instantiate(rooms[1], r.transform.position, Quaternion.Euler(0, 0, 90));
+                            thisRoom = Instantiate(rooms[1], r.transform.position, Quaternion.Euler(0, 0, 90));
                         }
                     }
                     else if (r.leftExit)
                     {
-                        GameObject thisRoom = Instantiate(rooms[1], r.transform.position, Quaternion.Euler(0, 0, -90));
+                        thisRoom = Instantiate(rooms[1], r.transform.position, Quaternion.Euler(0, 0, -90));
                     }
                     else
                     {
-                        GameObject thisRoom = Instantiate(rooms[3], r.transform.position, Quaternion.Euler(0, 0, 90));
+                        thisRoom = Instantiate(rooms[3], r.transform.position, Quaternion.Euler(0, 0, 90));
                     }
                 }
                 //No down
@@ -634,20 +696,20 @@ public class MapGen : MonoBehaviour {
                 {
                     if (r.leftExit)
                     {
-                        GameObject thisRoom = Instantiate(rooms[1], r.transform.position, Quaternion.Euler(0, 0, 180));
+                        thisRoom = Instantiate(rooms[1], r.transform.position, Quaternion.Euler(0, 0, 180));
                     }
                     else
                     {
-                        GameObject thisRoom = Instantiate(rooms[2], r.transform.position, Quaternion.Euler(0, 0, 180));
+                        thisRoom = Instantiate(rooms[2], r.transform.position, Quaternion.Euler(0, 0, 180));
                     }
                 }
                 else if (r.leftExit)
                 {
-                    GameObject thisRoom = Instantiate(rooms[2], r.transform.position, Quaternion.Euler(0, 0, -90));
+                    thisRoom = Instantiate(rooms[2], r.transform.position, Quaternion.Euler(0, 0, -90));
                 }
                 else
                 {
-                    GameObject thisRoom = Instantiate(rooms[4], r.transform.position, Quaternion.Euler(0, 0, 180));
+                    thisRoom = Instantiate(rooms[4], r.transform.position, Quaternion.Euler(0, 0, 180));
                 }
             }
             //No up
@@ -657,20 +719,20 @@ public class MapGen : MonoBehaviour {
                 {
                     if (r.leftExit)
                     {
-                        GameObject thisRoom = Instantiate(rooms[1], r.transform.position, Quaternion.identity);
+                        thisRoom = Instantiate(rooms[1], r.transform.position, Quaternion.identity);
                     }
                     else
                     {
-                        GameObject thisRoom = Instantiate(rooms[2], r.transform.position, Quaternion.Euler(0, 0, 90));
+                        thisRoom = Instantiate(rooms[2], r.transform.position, Quaternion.Euler(0, 0, 90));
                     }
                 }
                 else if (r.leftExit)
                 {
-                    GameObject thisRoom = Instantiate(rooms[2], r.transform.position, Quaternion.identity);
+                    thisRoom = Instantiate(rooms[2], r.transform.position, Quaternion.identity);
                 }
                 else
                 {
-                    GameObject thisRoom = Instantiate(rooms[4], r.transform.position, Quaternion.identity);
+                    thisRoom = Instantiate(rooms[4], r.transform.position, Quaternion.identity);
                 }
             }
             //No up/down
@@ -678,16 +740,16 @@ public class MapGen : MonoBehaviour {
             {
                 if (r.leftExit)
                 {
-                    GameObject thisRoom = Instantiate(rooms[3], r.transform.position, Quaternion.identity);
+                    thisRoom = Instantiate(rooms[3], r.transform.position, Quaternion.identity);
                 }
                 else
                 {
-                    GameObject thisRoom = Instantiate(rooms[4], r.transform.position, Quaternion.Euler(0, 0, 90));
+                    thisRoom = Instantiate(rooms[4], r.transform.position, Quaternion.Euler(0, 0, 90));
                 }
             }
             else
             {
-                GameObject thisRoom = Instantiate(rooms[4], r.transform.position, Quaternion.Euler(0, 0, -90));
+                thisRoom = Instantiate(rooms[4], r.transform.position, Quaternion.Euler(0, 0, -90));
             }
         }
         //For corridors:
@@ -701,20 +763,20 @@ public class MapGen : MonoBehaviour {
                     {
                         if (r.leftExit)
                         {
-                            GameObject thisRoom = Instantiate(rooms[5], r.transform.position, Quaternion.identity);
+                            thisRoom = Instantiate(rooms[5], r.transform.position, Quaternion.identity);
                         }
                         else
                         {
-                            GameObject thisRoom = Instantiate(rooms[6], r.transform.position, Quaternion.Euler(0, 0, 90));
+                            thisRoom = Instantiate(rooms[6], r.transform.position, Quaternion.Euler(0, 0, 90));
                         }
                     }
                     else if (r.leftExit)
                     {
-                        GameObject thisRoom = Instantiate(rooms[6], r.transform.position, Quaternion.Euler(0, 0, -90));
+                        thisRoom = Instantiate(rooms[6], r.transform.position, Quaternion.Euler(0, 0, -90));
                     }
                     else
                     {
-                        GameObject thisRoom = Instantiate(rooms[3], r.transform.position, Quaternion.Euler(0, 0, 90));
+                        thisRoom = Instantiate(rooms[3], r.transform.position, Quaternion.Euler(0, 0, 90));
                     }
                 }
                 //No down
@@ -722,20 +784,20 @@ public class MapGen : MonoBehaviour {
                 {
                     if (r.leftExit)
                     {
-                        GameObject thisRoom = Instantiate(rooms[6], r.transform.position, Quaternion.Euler(0, 0, 180));
+                        thisRoom = Instantiate(rooms[6], r.transform.position, Quaternion.Euler(0, 0, 180));
                     }
                     else
                     {
-                        GameObject thisRoom = Instantiate(rooms[7], r.transform.position, Quaternion.Euler(0, 0, 180));
+                        thisRoom = Instantiate(rooms[7], r.transform.position, Quaternion.Euler(0, 0, 180));
                     }
                 }
                 else if (r.leftExit)
                 {
-                    GameObject thisRoom = Instantiate(rooms[7], r.transform.position, Quaternion.Euler(0, 0, -90));
+                    thisRoom = Instantiate(rooms[7], r.transform.position, Quaternion.Euler(0, 0, -90));
                 }
                 else
                 {
-                    GameObject thisRoom = Instantiate(rooms[9], r.transform.position, Quaternion.Euler(0, 0, -90));
+                    thisRoom = Instantiate(rooms[9], r.transform.position, Quaternion.Euler(0, 0, -90));
                 }
             }
             //No up
@@ -745,20 +807,20 @@ public class MapGen : MonoBehaviour {
                 {
                     if (r.leftExit)
                     {
-                        GameObject thisRoom = Instantiate(rooms[6], r.transform.position, Quaternion.identity);
+                        thisRoom = Instantiate(rooms[6], r.transform.position, Quaternion.identity);
                     }
                     else
                     {
-                        GameObject thisRoom = Instantiate(rooms[7], r.transform.position, Quaternion.Euler(0, 0, 90));
+                        thisRoom = Instantiate(rooms[7], r.transform.position, Quaternion.Euler(0, 0, 90));
                     }
                 }
                 else if (r.leftExit)
                 {
-                    GameObject thisRoom = Instantiate(rooms[7], r.transform.position, Quaternion.identity);
+                    thisRoom = Instantiate(rooms[7], r.transform.position, Quaternion.identity);
                 }
                 else
                 {
-                    GameObject thisRoom = Instantiate(rooms[9], r.transform.position, Quaternion.Euler(0, 0, 90));
+                    thisRoom = Instantiate(rooms[9], r.transform.position, Quaternion.Euler(0, 0, 90));
                 }
             }
             //No up/down
@@ -766,18 +828,21 @@ public class MapGen : MonoBehaviour {
             {
                 if (r.leftExit)
                 {
-                    GameObject thisRoom = Instantiate(rooms[3], r.transform.position, Quaternion.identity);
+                    thisRoom = Instantiate(rooms[3], r.transform.position, Quaternion.identity);
                 }
                 else
                 {
-                    GameObject thisRoom = Instantiate(rooms[9], r.transform.position, Quaternion.Euler(0, 0, 180));
+                    thisRoom = Instantiate(rooms[9], r.transform.position, Quaternion.Euler(0, 0, 180));
                 }
             }
             else
             {
-                GameObject thisRoom = Instantiate(rooms[9], r.transform.position, Quaternion.identity);
+                thisRoom = Instantiate(rooms[9], r.transform.position, Quaternion.identity);
             }
         }
+		if (thisRoom != null) {
+			thisRoom.transform.parent = r.transform;
+		}
     }
 
     void chkValid(RoomState r, int currX, int currY)

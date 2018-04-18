@@ -7,6 +7,9 @@ public class RoomState : MonoBehaviour {
     public int roomType = -1;
     public bool upExit, downExit, leftExit, rightExit, playerSpawn, active;
 
+	public int gridX;
+	public int gridY;
+
 	// Use this for initialization
 	void Start () {
 		
