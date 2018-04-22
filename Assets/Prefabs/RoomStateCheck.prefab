@@ -58,3 +58,7 @@ MonoBehaviour:
   rightExit: 0
   playerSpawn: 0
   active: 0
+  exitRoom: 0
+  roomTiles: {fileID: 0}
+  gridX: 0
+  gridY: 0

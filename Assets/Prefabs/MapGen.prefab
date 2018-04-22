@@ -52,3 +52,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawner: {fileID: 114905604632844004, guid: 36721c197a672fb46a11064baffea8f6, type: 2}
+  rooms:
+  - {fileID: 1350159792411436, guid: b73c9618cf0bbcd4396a20f6c1f4f8f8, type: 2}
+  - {fileID: 1229470114413456, guid: 747d2779ed785ab44acc1d98484d1385, type: 2}
+  - {fileID: 1467788382325002, guid: f9110b9f1a5de734382848251d0eb113, type: 2}
+  - {fileID: 1330643384170168, guid: 450d7844e07305b4e9be713c002c4ca5, type: 2}
+  - {fileID: 1060777669791028, guid: 30f1d3ef9a72b364bb9b5bf8af00b45b, type: 2}
+  - {fileID: 1056405488330682, guid: 2a5e48da74d005f45b89657af38494f2, type: 2}
+  - {fileID: 1370017427812756, guid: e47816a03b1b433489e4e772f46d3175, type: 2}
+  - {fileID: 1252770689342592, guid: 848a56f8bc15e224d824de6a2417aded, type: 2}
+  - {fileID: 1001714934960148, guid: 12274763782a23342abaf9ef485d9f06, type: 2}
+  - {fileID: 1243227844331076, guid: 8a918e801a6a4c141b719fcdc1193af4, type: 2}
+  startX: 0
+  startY: 0
+  currentX: 0
+  currentY: 0
+  pSpawnPlaced: 0
+  stairsPlaced: 0
+  cornerInner: {fileID: 21300000, guid: 7edfe3c9e5585794fb852e0a33e1c885, type: 3}
+  stairway: {fileID: 114569098589104376, guid: c772d6d6b42569046bc52209faf5d137, type: 2}
