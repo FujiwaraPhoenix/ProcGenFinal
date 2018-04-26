@@ -74,10 +74,14 @@ public class MapGen : MonoBehaviour {
                 if (mapLocs[i, j].exitRoom)
                 {
                     Stairs stairwell = Instantiate(stairway, mapLocs[i, j].transform.position, Quaternion.identity);
+                    
+                }
+                if (mapLocs[i, j].playerSpawn)
+                {
+                    PlayerControls.pc.transform.position = mapLocs[i, j].transform.position;
                 }
             }
         }
-
     }
 	
 	// Update is called once per frame

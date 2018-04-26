@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 61151212463460074}
   m_Layer: 0
   m_Name: WallICorner (2)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -255,7 +255,7 @@ GameObject:
   - component: {fileID: 61652569721342720}
   m_Layer: 0
   m_Name: WallICorner (1)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
