@@ -867,323 +867,6 @@ public class MapGen : MonoBehaviour {
         }
     }
 
-    public void swapCorners(RoomState r)
-    {
-        if (r.roomType == 0)
-        {
-            if (r.upExit)
-            {
-                if (r.downExit)
-                {
-                    if (r.leftExit)
-                    {
-                        if (r.rightExit)
-                        {
-                            //All
-                            //Up
-                            if (mapLocs[r.gridX, r.gridY + 1].roomType == 1)
-                            {
-                                r.roomTiles.CornerTiles[0].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[0].transform.localEulerAngles = new Vector3(0, 0, 90);
-                                r.roomTiles.CornerTiles[1].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            }
-                            //Right
-                            if (mapLocs[r.gridX + 1, r.gridY].roomType == 1)
-                            {
-                                r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
-                            }
-                            //Down
-                            if (mapLocs[r.gridX, r.gridY - 1].roomType == 1)
-                            {
-                                r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
-                            }
-                            //Left
-                            if (mapLocs[r.gridX - 1, r.gridY].roomType == 1)
-                            {
-                                r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
-                            }
-                        }
-                        else
-                        {
-                            //UDL
-                            //Up
-                            if (mapLocs[r.gridX, r.gridY + 1].roomType == 1)
-                            {
-                                r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
-                            }
-                            //Down
-                            if (mapLocs[r.gridX, r.gridY - 1].roomType == 1)
-                            {
-                                r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
-                            }
-                            //Left
-                            if (mapLocs[r.gridX - 1, r.gridY].roomType == 1)
-                            {
-                                r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (r.rightExit)
-                        {
-                            //UDR
-                            //Up
-                            if (mapLocs[r.gridX, r.gridY + 1].roomType == 1)
-                            {
-                                r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
-                                r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            }
-                            //Right
-                            if (mapLocs[r.gridX + 1, r.gridY].roomType == 1)
-                            {
-                                r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
-                            }
-                            //Down
-                            if (mapLocs[r.gridX, r.gridY - 1].roomType == 1)
-                            {
-                                r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
-                            }
-                        }
-                        else
-                        {
-                            //UD
-                            //Up
-                            if (mapLocs[r.gridX, r.gridY + 1].roomType == 1)
-                            {
-                                r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[3].transform.localEulerAngles = new Vector3(0, 0, -90);
-                                r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
-                            }
-                            //Down
-                            if (mapLocs[r.gridX, r.gridY - 1].roomType == 1)
-                            {
-                                r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
-                                r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                                r.roomTiles.CornerTiles[7].transform.localEulerAngles = new Vector3(0, 0, 90);
-                            }
-                        }
-                    }
-                }
-                else if (r.leftExit)
-                {
-                    if (r.rightExit)
-                    {
-                        //URL
-                        //Up
-                        if (mapLocs[r.gridX, r.gridY + 1].roomType == 1)
-                        {
-                            r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
-                            r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        }
-                        //Right
-                        if (mapLocs[r.gridX + 1, r.gridY].roomType == 1)
-                        {
-                            r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
-                        }
-                        //Left
-                        if (mapLocs[r.gridX - 1, r.gridY].roomType == 1)
-                        {
-                            r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
-                        }
-                    }
-                    else
-                    {
-                        //UL
-                        //Up
-                        if (mapLocs[r.gridX, r.gridY + 1].roomType == 1)
-                        {
-                            r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
-                            r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        }
-                        //Left
-                        if (mapLocs[r.gridX - 1, r.gridY].roomType == 1)
-                        {
-                            r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
-                        }
-                    }
-                }
-                else if (r.rightExit)
-                {
-                    //UR
-                    //Up
-                    if (mapLocs[r.gridX, r.gridY + 1].roomType == 1)
-                    {
-                        r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
-                        r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                    }
-                    //Right
-                    if (mapLocs[r.gridX + 1, r.gridY].roomType == 1)
-                    {
-                        r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
-                    }
-                }
-                else
-                {
-                    //Up only
-                    //Up
-                    if (mapLocs[r.gridX, r.gridY + 1].roomType == 1)
-                    {
-                        r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
-                        r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                    }
-                }
-            }
-            else if (r.downExit)
-            {
-                if (r.leftExit)
-                {
-                    if (r.rightExit)
-                    {
-                        //DLR
-                        //Right
-                        if (mapLocs[r.gridX + 1, r.gridY].roomType == 1)
-                        {
-                            r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
-                        }
-                        //Down
-                        if (mapLocs[r.gridX, r.gridY - 1].roomType == 1)
-                        {
-                            r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
-                        }
-                        //Left
-                        if (mapLocs[r.gridX - 1, r.gridY].roomType == 1)
-                        {
-                            r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
-                        }
-                    }
-                    else
-                    {
-                        //DL
-                        //Down
-                        if (mapLocs[r.gridX, r.gridY - 1].roomType == 1)
-                        {
-                            r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
-                        }
-                        //Left
-                        if (mapLocs[r.gridX - 1, r.gridY].roomType == 1)
-                        {
-                            r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                            r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
-                        }
-                    }
-                }
-                else if (r.rightExit)
-                {
-                    //DR
-                    //Right
-                    if (mapLocs[r.gridX + 1, r.gridY].roomType == 1)
-                    {
-                        r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
-                    }
-                    //Down
-                    if (mapLocs[r.gridX, r.gridY - 1].roomType == 1)
-                    {
-                        r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
-                    }
-                }
-                else
-                {
-                    //D
-                    //Down
-                    if (mapLocs[r.gridX, r.gridY - 1].roomType == 1)
-                    {
-                        r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
-                    }
-                }
-            }
-            else if (r.leftExit)
-            {
-                if (r.rightExit)
-                {
-                    //LR
-                    //Right
-                    if (mapLocs[r.gridX + 1, r.gridY].roomType == 1)
-                    {
-                        r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
-                    }
-                    //Left
-                    if (mapLocs[r.gridX - 1, r.gridY].roomType == 1)
-                    {
-                        r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
-                    }
-                }
-                else
-                {
-                    //L
-                    //Left
-                    if (mapLocs[r.gridX - 1, r.gridY].roomType == 1)
-                    {
-                        r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                        r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
-                    }
-                }
-            }
-            else //if (r.rightExit)
-            {
-                //R
-                //Right
-                if (mapLocs[r.gridX + 1, r.gridY].roomType == 1)
-                {
-                    r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                    r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
-                    r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
-                }
-            }
-        }
-    }
-
     public void spawnStairs(RoomState r)
     {
         if (r.active && !r.playerSpawn && r.roomType == 0)
@@ -1206,6 +889,195 @@ public class MapGen : MonoBehaviour {
             {
                 r.playerSpawn = true;
                 pSpawnPlaced = true;
+            }
+        }
+    }
+
+    public void swapCorners(RoomState r)
+    {
+        if (r.roomType == 0)
+        {
+            if (r.upExit)
+            {
+                if (r.downExit)
+                {
+                    if (r.leftExit)
+                    {
+                        if (r.rightExit)
+                        {
+                            //All
+                            r.roomTiles.CornerTiles[0].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[0].transform.localEulerAngles = new Vector3(0, 0, 90);
+                            r.roomTiles.CornerTiles[1].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
+                            r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
+                            r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
+                        }
+                        else
+                        {
+                            //UDL
+                            r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
+                            r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
+                            r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
+                        }
+                    }
+                    else
+                    {
+                        if (r.rightExit)
+                        {
+                            //UDR
+                            r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
+                            r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
+                            r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
+                        }
+                        else
+                        {
+                            //UD
+                            r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[3].transform.localEulerAngles = new Vector3(0, 0, -90);
+                            r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
+                            r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
+                            r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                            r.roomTiles.CornerTiles[7].transform.localEulerAngles = new Vector3(0, 0, 90);
+                        }
+                    }
+                }
+                else if (r.leftExit)
+                {
+                    if (r.rightExit)
+                    {
+                        //URL
+                        r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
+                        r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
+                        r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
+                    }
+                    else
+                    {
+                        //UL
+                        r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
+                        r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
+                    }
+                }
+                else if (r.rightExit)
+                {
+                    //UR
+                    r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
+                    r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
+                }
+                else
+                {
+                    //Up only
+                    r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
+                    r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                }
+            }
+            else if (r.downExit)
+            {
+                if (r.leftExit)
+                {
+                    if (r.rightExit)
+                    {
+                        //DLR
+                        r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
+                        r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
+                        r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
+                    }
+                    else
+                    {
+                        //DL
+                        r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
+                        r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                        r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
+                    }
+                }
+                else if (r.rightExit)
+                {
+                    //DR
+                    r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
+                    r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
+                }
+                else
+                {
+                    //D
+                    r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
+                }
+            }
+            else if (r.leftExit)
+            {
+                if (r.rightExit)
+                {
+                    //LR
+                    r.roomTiles.CornerTiles[2].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[3].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[2].transform.localEulerAngles = new Vector3(0, 0, 0);
+                    r.roomTiles.CornerTiles[6].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[7].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[6].transform.localEulerAngles = new Vector3(0, 0, 180);
+                }
+                else
+                {
+                    //L
+                    r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                    r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
+                }
+            }
+            else //if (r.rightExit)
+            {
+                //R
+                r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
+                r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
             }
         }
     }
