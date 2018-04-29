@@ -5,7 +5,7 @@ using UnityEngine;
 public class Controller : MonoBehaviour {
     //The usual. This is an object that controls everything from the shadows.
     public static Controller Instance;
-    public int HP, DEF, ATK;
+    public int HP, DEF, ATK, maxHP;
     public bool isAlive, paused;
 
     //public List<> inventory;

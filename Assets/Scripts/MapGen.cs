@@ -20,7 +20,7 @@ public class MapGen : MonoBehaviour {
         {
             for (int j = 0; j < mapSize; j++)
             {
-                mapLocs[i,j] = Instantiate(spawner, new Vector3((i * 5.9226f), (j * 5.9226f), 0f), Quaternion.identity);
+                mapLocs[i,j] = Instantiate(spawner, new Vector3((i * 8.4f), (j * 8.4f), 0f), Quaternion.identity);
 				mapLocs[i,j].gridX = i;
 				mapLocs[i,j].gridY = j;
 			}

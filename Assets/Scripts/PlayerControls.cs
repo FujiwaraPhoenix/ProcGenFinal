@@ -8,12 +8,14 @@ public class PlayerControls : MonoBehaviour {
     public Rigidbody2D hitbox;
     public float mvtSpd = 10f;
     public float accel = 20f;
+    public float attackTimer, attackCD;
     //Default: Up, Down, Left, Right. In order.
     public Sprite[] playerSprites = new Sprite[4];
     public SpriteRenderer spr;
 
     //For checking what direction you're facing.
     public float timeUp, timeDown, timeLeft, timeRight;
+    protected static RaycastHit2D[] capTargets = new RaycastHit2D[10];
 
     public enum pDir
     {
@@ -27,6 +29,13 @@ public class PlayerControls : MonoBehaviour {
     public bool attacking;
     pDir playerDirection = pDir.Down;
 
+    //For attacking.
+    //As usual, Up/Down/Left/Right
+    public BoxCollider2D[] atkHitboxes = new BoxCollider2D[4];
+
+    //Item Interaction
+    public bool canOpen;
+
 	// Use this for initialization
 	void Start () {
         hitbox = GetComponent<Rigidbody2D>();
@@ -35,9 +44,14 @@ public class PlayerControls : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        tryToMove();
-        playerOrientation();
-        playerSpriteUpdate(playerDirection);
+        //The player will stay in place while attacking with this in place.
+        if (!attacking)
+        {
+            tryToMove();
+            playerOrientation();
+            playerSpriteUpdate(playerDirection);
+        }
+        attack(playerDirection);
     }
 
 
@@ -86,31 +100,31 @@ public class PlayerControls : MonoBehaviour {
             {
                 timeUp += Time.deltaTime;
             }
+            else
+            {
+                timeUp = 0;
+            }
             if (Input.GetKey(KeyCode.S))
             {
                 timeDown += Time.deltaTime;
+            }
+            else
+            {
+                timeDown = 0;
             }
             if (Input.GetKey(KeyCode.A))
             {
                 timeLeft += Time.deltaTime;
             }
+            else
+            {
+                timeLeft = 0;
+            }
             if (Input.GetKey(KeyCode.D))
             {
                 timeRight += Time.deltaTime;
             }
-            if (Input.GetKeyUp(KeyCode.W))
-            {
-                timeUp = 0;
-            }
-            if (Input.GetKeyUp(KeyCode.S))
-            {
-                timeDown = 0;
-            }
-            if (Input.GetKeyUp(KeyCode.A))
-            {
-                timeLeft = 0;
-            }
-            if (Input.GetKeyUp(KeyCode.D))
+            else
             {
                 timeRight = 0;
             }
@@ -130,11 +144,11 @@ public class PlayerControls : MonoBehaviour {
             {
                 playerDirection = pDir.Left;
             }
-            if ((Input.GetKeyUp(KeyCode.W)) && (Input.GetKeyUp(KeyCode.S)) && (Input.GetKeyUp(KeyCode.A)) && Input.GetKeyUp(KeyCode.D)){
+            if (!(Input.GetKey(KeyCode.W)) && !(Input.GetKey(KeyCode.S)) && !(Input.GetKey(KeyCode.A)) && !(Input.GetKey(KeyCode.D))){
                 moving = false;
             }
         }
-        Debug.Log(playerDirection);
+        //Debug.Log(playerDirection);
         //OnKeyUp, set that respective value to 0.
         //Then last, set direction to whatever is the largest (or leave it if all buttons are untouched and thus the player is not moving).
     }
@@ -195,5 +209,90 @@ public class PlayerControls : MonoBehaviour {
         {
             spr.sprite = playerSprites[3];
         }
+    }
+
+    public void attack(pDir currentDirection)
+    {
+        if (!attacking)
+        {
+            if (attackTimer <= 0 && Input.GetMouseButtonDown(0))
+            {
+                if (currentDirection == pDir.Up)
+                {
+                    BoxCollider2D tempHitbox = atkHitboxes[0].GetComponent<BoxCollider2D>();
+                    int targetCount = tempHitbox.Cast(Vector2.zero, capTargets);
+                    for (int i = 0; i < targetCount && i < capTargets.Length; i++)
+                    {
+                        RaycastHit2D hit = capTargets[i];
+                        Enemy tempE = hit.transform.GetComponent<Enemy>();
+                        tempE.hp -= Controller.Instance.ATK;
+                        Debug.Log("Swung up, hit something!");
+                        //Play the animation.
+                    }
+                    if (targetCount == 0)
+                    {
+                        Debug.Log("Swung up, no targets!");
+                    }
+                }
+                if (currentDirection == pDir.Down)
+                {
+                    BoxCollider2D tempHitbox = atkHitboxes[1].GetComponent<BoxCollider2D>();
+                    int targetCount = tempHitbox.Cast(Vector2.zero, capTargets);
+                    for (int i = 0; i < targetCount && i < capTargets.Length; i++)
+                    {
+                        RaycastHit2D hit = capTargets[i];
+                        Enemy tempE = hit.transform.GetComponent<Enemy>();
+                        tempE.hp -= Controller.Instance.ATK;
+                        Debug.Log("Swung down, hit something!");
+                        //Play the animation.
+                    }
+                    if (targetCount == 0)
+                    {
+                        Debug.Log("Swung down, no targets!");
+                    }
+                }
+                if (currentDirection == pDir.Left)
+                {
+                    BoxCollider2D tempHitbox = atkHitboxes[2].GetComponent<BoxCollider2D>();
+                    int targetCount = tempHitbox.Cast(Vector2.zero, capTargets);
+                    for (int i = 0; i < targetCount && i < capTargets.Length; i++)
+                    {
+                        RaycastHit2D hit = capTargets[i];
+                        Enemy tempE = hit.transform.GetComponent<Enemy>();
+                        tempE.hp -= Controller.Instance.ATK;
+                        Debug.Log("Swung left, hit something!");
+                        //Play the animation.
+                    }
+                    if (targetCount == 0)
+                    {
+                        Debug.Log("Swung left, no targets!");
+                    }
+                }
+                if (currentDirection == pDir.Right)
+                {
+                    BoxCollider2D tempHitbox = atkHitboxes[3].GetComponent<BoxCollider2D>();
+                    int targetCount = tempHitbox.Cast(Vector2.zero, capTargets);
+                    for (int i = 0; i < targetCount && i < capTargets.Length; i++)
+                    {
+                        RaycastHit2D hit = capTargets[i];
+                        Enemy tempE = hit.transform.GetComponent<Enemy>();
+                        tempE.hp -= Controller.Instance.ATK;
+                        Debug.Log("Swung right, hit something!");
+                        //Play the animation.
+                    }
+                    if (targetCount == 0)
+                    {
+                        Debug.Log("Swung right, no targets!");
+                    }
+                }
+                attackTimer = attackCD;
+                attacking = true;
+            }
+        }
+        else if (attackTimer < 0 && attacking)
+        {
+            attacking = false;
+        }
+        attackTimer -= Time.deltaTime;
     }
 }
