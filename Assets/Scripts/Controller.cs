@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Controller : MonoBehaviour {
     //The usual. This is an object that controls everything from the shadows.
@@ -27,4 +28,25 @@ public class Controller : MonoBehaviour {
     void Update () {
 		
 	}
+
+    public void pauseMenu()
+    {
+        if (!Instance.paused)
+        {
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                Time.timeScale = 0;
+                //Load up the menu.
+            }
+        }
+        else
+        {
+            //Enter also acts as unpause.
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                Time.timeScale = 1;
+                //Close the menu.
+            }
+        }
+    }
 }

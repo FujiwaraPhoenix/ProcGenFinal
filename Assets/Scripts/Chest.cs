@@ -14,7 +14,7 @@ public class Chest : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        popChest();
 	}
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -56,7 +56,9 @@ public class Chest : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 opened = true;
-                cc.gameObject.SetActive(false);
+                cc.enabled = false;
+                //Change sprite
+                //Send message that you got something.
             }
         }
     }

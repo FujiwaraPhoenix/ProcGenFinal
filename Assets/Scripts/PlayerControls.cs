@@ -44,14 +44,17 @@ public class PlayerControls : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        //The player will stay in place while attacking with this in place.
-        if (!attacking)
+        if (!Controller.Instance.paused)
         {
-            tryToMove();
-            playerOrientation();
-            playerSpriteUpdate(playerDirection);
+            //The player will stay in place while attacking with this in place.
+            if (!attacking)
+            {
+                tryToMove();
+                playerOrientation();
+                playerSpriteUpdate(playerDirection);
+            }
+            attack(playerDirection);
         }
-        attack(playerDirection);
     }
 
 
