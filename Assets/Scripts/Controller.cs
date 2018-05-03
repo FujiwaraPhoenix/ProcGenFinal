@@ -8,6 +8,7 @@ public class Controller : MonoBehaviour {
     //The usual. This is an object that controls everything from the shadows.
     public static Controller Instance;
     public int HP, DEF, ATK, maxHP, floorNumber;
+    public int potionCount;
     public bool isAlive, paused, stairActive;
 
     //public List<> inventory;
@@ -28,6 +29,10 @@ public class Controller : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         PauseMenu();
+        if (!PlayerControls.pc.canOpen)
+        {
+            chugPotion();
+        }
 	}
 
     public void PauseMenu()
@@ -75,5 +80,20 @@ public class Controller : MonoBehaviour {
         HUD.display.y.gameObject.SetActive(false);
         HUD.display.n.gameObject.SetActive(false);
         HUD.display.question.gameObject.SetActive(false);
+    }
+
+    public void chugPotion()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            if ((potionCount > 0) && ((Controller.Instance.HP < Controller.Instance.maxHP)))
+            {
+                int recoveryVal = (Controller.Instance.maxHP / 3);
+                Controller.Instance.HP += recoveryVal;
+                if (Controller.Instance.HP > Controller.Instance.maxHP)
+                {
+                    Controller.Instance.HP = Controller.Instance.maxHP;
+                }
+            }
+        }
     }
 }
