@@ -6,6 +6,9 @@ public class Chest : MonoBehaviour {
     public bool opened;
     public CircleCollider2D cc;
     public RaycastHit2D[] nearbyObjs = new RaycastHit2D[10];
+    public bool potion, shard, gold;
+    public SpriteRenderer spr;
+    public Sprite openSprite;
 
 	// Use this for initialization
 	void Start () {
@@ -19,16 +22,19 @@ public class Chest : MonoBehaviour {
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (!opened)
+        if (collision.tag == "Player")
         {
-            int targetCount = cc.Cast(Vector2.zero, nearbyObjs);
-            if (nearbyObjs != null) {
-                for (int i = 0; i < targetCount && i < nearbyObjs.Length; i++)
+            if (!opened)
+            {
+                int targetCount = cc.Cast(Vector2.zero, nearbyObjs);
+                if (nearbyObjs != null)
                 {
-                    RaycastHit2D hit = nearbyObjs[i];
-                    PlayerControls tempChk = hit.transform.GetComponent<PlayerControls>();
-                    PlayerControls.pc.canOpen = true;
-                    Debug.Log("Can open!");
+                    for (int i = 0; i < targetCount && i < nearbyObjs.Length; i++)
+                    {
+                        RaycastHit2D hit = nearbyObjs[i];
+                        PlayerControls tempChk = hit.transform.GetComponent<PlayerControls>();
+                        PlayerControls.pc.canOpen = true;
+                    }
                 }
             }
         }
@@ -36,15 +42,17 @@ public class Chest : MonoBehaviour {
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (!opened)
-        {
-            int targetCount = cc.Cast(Vector2.zero, nearbyObjs);
-            for (int i = 0; i < targetCount && i < nearbyObjs.Length; i++)
+        if (collision.tag == "Player") {
+            if (!opened)
             {
-                RaycastHit2D hit = nearbyObjs[i];
-                PlayerControls tempChk = hit.transform.GetComponent<PlayerControls>();
-                PlayerControls.pc.canOpen = false;
-                Debug.Log("Can't open!");
+                int targetCount = cc.Cast(Vector2.zero, nearbyObjs);
+                for (int i = 0; i < targetCount && i < nearbyObjs.Length; i++)
+                {
+                    RaycastHit2D hit = nearbyObjs[i];
+                    PlayerControls tempChk = hit.transform.GetComponent<PlayerControls>();
+                    PlayerControls.pc.canOpen = false;
+                    //Debug.Log("Can't open!");
+                }
             }
         }
     }
@@ -57,7 +65,27 @@ public class Chest : MonoBehaviour {
             {
                 opened = true;
                 cc.enabled = false;
+                if (potion)
+                {
+                    Controller.Instance.potionCount++;
+                    ItemGet item = Instantiate(Controller.Instance.ig, transform.position, Quaternion.identity);
+                    item.spr.sprite = item.potion;
+                }
+                if (shard)
+                {
+                    Controller.Instance.shardCount++;
+                    ItemGet item = Instantiate(Controller.Instance.ig, transform.position, Quaternion.identity);
+                    item.spr.sprite = item.shard;
+                }
+                if (gold)
+                {
+                    Controller.Instance.moneyCount += Controller.Instance.floorNumber * 20;
+                    ItemGet item = Instantiate(Controller.Instance.ig, transform.position, Quaternion.identity);
+                    item.spr.sprite = item.coinBag;
+                }
+                PlayerControls.pc.canOpen = false;
                 //Change sprite
+                spr.sprite = openSprite;
                 //Send message that you got something.
             }
         }

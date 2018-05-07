@@ -11,6 +11,8 @@ public class MapGen : MonoBehaviour {
     public int startX, startY, currentX, currentY;
     public bool pSpawnPlaced = false;
     public bool stairsPlaced = false;
+    //This is on a room by room basis btw.
+    public int enemyLimit;
     public Sprite cornerInner;
     public Stairs stairway;
 
@@ -58,6 +60,7 @@ public class MapGen : MonoBehaviour {
             for (int j = 0; j < mapSize; j++)
             {
                 makeRoom(mapLocs[i, j]);
+                seedChestsAndEnemies(mapLocs[i, j]);
             }
         }
         for (int i = 0; i < mapSize; i++)
@@ -1078,6 +1081,89 @@ public class MapGen : MonoBehaviour {
                 r.roomTiles.CornerTiles[4].GetComponent<SpriteRenderer>().sprite = cornerInner;
                 r.roomTiles.CornerTiles[5].GetComponent<SpriteRenderer>().sprite = cornerInner;
                 r.roomTiles.CornerTiles[4].transform.localEulerAngles = new Vector3(0, 0, -90);
+            }
+        }
+    }
+
+    void seedChestsAndEnemies(RoomState r)
+    {
+        if (r.roomType == 0 && !r.playerSpawn && !r.exitRoom)
+        {
+            for (int i = 0; i < enemyLimit; i++)
+            {
+                float xcor = Random.Range(-2.4f, 2.4f);
+                float ycor = Random.Range(-2.4f, 2.4f);
+                Vector3 offset = new Vector3(xcor, ycor, 0);
+                float enemyGen = Random.Range(0, 1f);
+                if (enemyGen < .5f)
+                {
+                    Enemy e = Instantiate(Controller.Instance.e, r.transform.position + offset, Quaternion.identity);
+                    e.maxHp = Random.Range(Controller.Instance.floorNumber * 2, Controller.Instance.floorNumber * 5);
+                    e.hp = e.maxHp;
+                    e.dmg = Random.Range(Controller.Instance.floorNumber * 2, Controller.Instance.floorNumber * 3);
+                    e.storedXP = Random.Range(Controller.Instance.floorNumber, Controller.Instance.floorNumber * 2);
+                    e.storedGold = Random.Range(Controller.Instance.floorNumber, Controller.Instance.floorNumber * 2);
+                    float rareChk = Random.Range(0, 1f);
+                    if (rareChk > .75f)
+                    {
+                        if (rareChk > .85f)
+                        {
+                            e.shard = true;
+                        }
+                        else
+                        {
+                            e.potion = true;
+                        }
+                    }
+                }
+                else if (enemyGen < .7f)
+                {
+                    Enemy e = Instantiate(Controller.Instance.chase, r.transform.position + offset, Quaternion.identity);
+                    e.maxHp = Random.Range(Controller.Instance.floorNumber * 3, Controller.Instance.floorNumber * 5);
+                    e.hp = e.maxHp;
+                    e.dmg = Random.Range(Controller.Instance.floorNumber * 2, Controller.Instance.floorNumber * 3);
+                    e.storedXP = Random.Range(Controller.Instance.floorNumber * 2, Controller.Instance.floorNumber * 3);
+                    e.storedGold = Random.Range(Controller.Instance.floorNumber * 2, Controller.Instance.floorNumber * 3);
+                    float rareChk = Random.Range(0, 1f);
+                    if (rareChk > .65f)
+                    {
+                        if (rareChk > .75f)
+                        {
+                            e.shard = true;
+                        }
+                        else
+                        {
+                            e.potion = true;
+                        }
+                    }
+                }
+                else if (enemyGen < .75f)
+                {
+                    Enemy e = Instantiate(Controller.Instance.metal, r.transform.position + offset, Quaternion.identity);
+                    e.maxHp = Random.Range(Controller.Instance.floorNumber * 2, Controller.Instance.floorNumber * 3);
+                    e.hp = e.maxHp;
+                    e.dmg = Random.Range(Controller.Instance.floorNumber * 5, Controller.Instance.floorNumber * 6);
+                    e.storedXP = Random.Range(Controller.Instance.floorNumber * 10, Controller.Instance.floorNumber * 20);
+                    e.storedGold = Random.Range(Controller.Instance.floorNumber * 10, Controller.Instance.floorNumber * 20);
+                    e.shard = true;
+                }
+            }
+            if (Random.Range(0,1f) > .5)
+            {
+                Chest e = Instantiate(Controller.Instance.ch, r.transform.position, Quaternion.identity);
+                float randItem = Random.Range(0, 1f);
+                if (randItem < .75f)
+                {
+                    e.gold = true;
+                }
+                else if (randItem < .9f)
+                {
+                    e.potion = true;
+                }
+                else
+                {
+                    e.shard = true;
+                }
             }
         }
     }

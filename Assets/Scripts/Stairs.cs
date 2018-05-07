@@ -25,9 +25,8 @@ public class Stairs : MonoBehaviour {
             Controller.Instance.stairActive = true;
             Controller.Instance.paused = true;
             //Ask if the player wants to move to the next floor.
-            HUD.display.y.gameObject.SetActive(true);
-            HUD.display.n.gameObject.SetActive(true);
-            HUD.display.question.gameObject.SetActive(true);
+            HUD.display.quickData.SetActive(false);
+            HUD.display.stairBatch.SetActive(true);
             //If yes, run a function in the controller that loads the scene over.
             //if no, just unpause lol.
         }

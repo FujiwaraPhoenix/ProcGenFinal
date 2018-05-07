@@ -10,8 +10,6 @@ public class PlayerControls : MonoBehaviour {
     public float accel = 20f;
     public float attackTimer, attackCD;
     //Default: Up, Down, Left, Right. In order.
-    public Sprite[] playerSprites = new Sprite[4];
-    public SpriteRenderer spr;
 
     //For checking what direction you're facing.
     public float timeUp, timeDown, timeLeft, timeRight;
@@ -29,6 +27,8 @@ public class PlayerControls : MonoBehaviour {
     public bool attacking;
     pDir playerDirection = pDir.Down;
 
+    public Animator anim;
+
     //For attacking.
     //As usual, Up/Down/Left/Right
     public BoxCollider2D[] atkHitboxes = new BoxCollider2D[4];
@@ -39,7 +39,6 @@ public class PlayerControls : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         hitbox = GetComponent<Rigidbody2D>();
-        spr = GetComponent<SpriteRenderer>();
 	}
 	
 	// Update is called once per frame
@@ -79,21 +78,25 @@ public class PlayerControls : MonoBehaviour {
             if (Input.GetKey(KeyCode.W))
             {
                 moving = true;
+                anim.SetBool("moving", true);
                 timeUp += Time.deltaTime;
             }
             if (Input.GetKey(KeyCode.S))
             {
                 moving = true;
+                anim.SetBool("moving", true);
                 timeDown += Time.deltaTime;
             }
             if (Input.GetKey(KeyCode.A))
             {
                 moving = true;
+                anim.SetBool("moving", true);
                 timeLeft += Time.deltaTime;
             }
             if (Input.GetKey(KeyCode.D))
             {
                 moving = true;
+                anim.SetBool("moving", true);
                 timeRight += Time.deltaTime;
             }
         }
@@ -149,6 +152,7 @@ public class PlayerControls : MonoBehaviour {
             }
             if (!(Input.GetKey(KeyCode.W)) && !(Input.GetKey(KeyCode.S)) && !(Input.GetKey(KeyCode.A)) && !(Input.GetKey(KeyCode.D))){
                 moving = false;
+                anim.SetBool("moving", false);
             }
         }
         //Debug.Log(playerDirection);
@@ -193,24 +197,64 @@ public class PlayerControls : MonoBehaviour {
         {
             hitbox.velocity = Vector2.zero;
         }
+        if (collision.gameObject.tag == "Enemy")
+        {
+            Enemy e = collision.gameObject.GetComponent<Enemy>();
+            if (hitbox.velocity != Vector2.zero)
+            {
+                switch (playerDirection)
+                {
+                    case pDir.Down:
+                        hitbox.AddForce(Vector2.up * 250f);
+                        break;
+                    case pDir.Up:
+                        hitbox.AddForce(Vector2.down * 250f);
+                        break;
+                    case pDir.Left:
+                        hitbox.AddForce(Vector2.right * 250f);
+                        break;
+                    case pDir.Right:
+                        hitbox.AddForce(Vector2.left * 250f);
+                        break;
+                }
+            }
+            else
+            {
+                switch (e.dir)
+                {
+                    case Enemy.eDir.Down:
+                        hitbox.AddForce(Vector2.down * 250f);
+                        break;
+                    case Enemy.eDir.Up:
+                        hitbox.AddForce(Vector2.up * 250f);
+                        break;
+                    case Enemy.eDir.Left:
+                        hitbox.AddForce(Vector2.left * 250f);
+                        break;
+                    case Enemy.eDir.Right:
+                        hitbox.AddForce(Vector2.right * 250f);
+                        break;
+                }
+            }
+        }
     }
 
     public void playerSpriteUpdate(pDir playerD){
         if (playerD == pDir.Up)
         {
-            spr.sprite = playerSprites[0];
+            anim.SetInteger("direction", 0);
         }
         else if (playerD == pDir.Down)
         {
-            spr.sprite = playerSprites[1];
+            anim.SetInteger("direction", 2);
         }
         else if (playerD == pDir.Left)
         {
-            spr.sprite = playerSprites[2];
+            anim.SetInteger("direction", 3);
         }
         else
         {
-            spr.sprite = playerSprites[3];
+            anim.SetInteger("direction", 1);
         }
     }
 
@@ -218,8 +262,9 @@ public class PlayerControls : MonoBehaviour {
     {
         if (!attacking)
         {
-            if (attackTimer <= 0 && Input.GetMouseButtonDown(0))
+            if (attackTimer <= 0 && Input.GetKeyDown(KeyCode.Space))
             {
+                hitbox.velocity = Vector2.zero;
                 if (currentDirection == pDir.Up)
                 {
                     BoxCollider2D tempHitbox = atkHitboxes[0].GetComponent<BoxCollider2D>();
@@ -228,7 +273,8 @@ public class PlayerControls : MonoBehaviour {
                     {
                         RaycastHit2D hit = capTargets[i];
                         Enemy tempE = hit.transform.GetComponent<Enemy>();
-                        tempE.hp -= Controller.Instance.ATK;
+                        tempE.hp -= (Controller.Instance.baseATK + Controller.Instance.wepATK);
+                        tempE.rb.AddForce(Vector2.up * Controller.Instance.knockbackForce);
                         Debug.Log("Swung up, hit something!");
                         //Play the animation.
                     }
@@ -245,7 +291,8 @@ public class PlayerControls : MonoBehaviour {
                     {
                         RaycastHit2D hit = capTargets[i];
                         Enemy tempE = hit.transform.GetComponent<Enemy>();
-                        tempE.hp -= Controller.Instance.ATK;
+                        tempE.hp -= (Controller.Instance.baseATK + Controller.Instance.wepATK);
+                        tempE.rb.AddForce(Vector2.down * Controller.Instance.knockbackForce);
                         Debug.Log("Swung down, hit something!");
                         //Play the animation.
                     }
@@ -262,7 +309,8 @@ public class PlayerControls : MonoBehaviour {
                     {
                         RaycastHit2D hit = capTargets[i];
                         Enemy tempE = hit.transform.GetComponent<Enemy>();
-                        tempE.hp -= Controller.Instance.ATK;
+                        tempE.hp -= (Controller.Instance.baseATK + Controller.Instance.wepATK);
+                        tempE.rb.AddForce(Vector2.left * Controller.Instance.knockbackForce);
                         Debug.Log("Swung left, hit something!");
                         //Play the animation.
                     }
@@ -279,7 +327,8 @@ public class PlayerControls : MonoBehaviour {
                     {
                         RaycastHit2D hit = capTargets[i];
                         Enemy tempE = hit.transform.GetComponent<Enemy>();
-                        tempE.hp -= Controller.Instance.ATK;
+                        tempE.hp -= (Controller.Instance.baseATK + Controller.Instance.wepATK);
+                        tempE.rb.AddForce(Vector2.right * Controller.Instance.knockbackForce);
                         Debug.Log("Swung right, hit something!");
                         //Play the animation.
                     }
