@@ -339,11 +339,13 @@ public class PlayerControls : MonoBehaviour {
                 }
                 attackTimer = attackCD;
                 attacking = true;
+                anim.SetBool("attacking", true);
             }
         }
         else if (attackTimer < 0 && attacking)
         {
             attacking = false;
+            anim.SetBool("attacking", false);
         }
         attackTimer -= Time.deltaTime;
     }
