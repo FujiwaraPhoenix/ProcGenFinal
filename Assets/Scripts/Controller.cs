@@ -143,6 +143,8 @@ public class Controller : MonoBehaviour {
         {
             PlayerControls.pc.gameObject.SetActive(true);
             cam.transform.parent = PlayerControls.pc.transform;
+            cam.transform.localPosition = new Vector3(0, 0, -32);
+            //PlayerControls.transform.position.x, PlayerControls.pc.transform.position.y
         }
     }
 
